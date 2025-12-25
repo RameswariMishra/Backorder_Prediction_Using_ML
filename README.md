@@ -166,7 +166,7 @@ Strong performance on a **highly imbalanced dataset**, balancing reliable backor
 - Environment: Jupyter Notebook
 
 ### Repository Structure 
-
+```
 backorder-prediction-ml/
 ├── notebooks/
 │   ├── Part_1_Data_Preprocessing.ipynb
@@ -177,4 +177,61 @@ backorder-prediction-ml/
 ├── README.md
 ├── requirements.txt
 └── .gitignore
+```
+## How to Run the Project
 
+#### Clone the repository
+```
+git clone https://github.com/your-username/backorder-prediction-ml.git
+```
+#### Install dependencies
+```
+pip install -r requirements.txt
+```
+#### Launch Jupyter Notebook
+```
+jupyter notebook
+
+```
+#### Run notebooks in order
+
+Part_1_Data_Preprocessing.ipynb
+
+Part_2_Model_Development.ipynb
+
+Part_3_Model_Evaluation.ipynb
+
+## Impact & Relevance
+
+Demonstrates a **production-aware ML** pipeline combining anomaly detection, feature selection, and supervised learning.
+
+Addresses a **real-world supply chain problem** with direct business impact.
+
+Highlights advanced strategies for **imbalanced classification and noise reduction.**
+
+Highly relevant for **Data Scientist, ML Engineer, Supply Chain Analytics, and Operations Analytics** roles.
+
+## Limitations & Future Work
+
+### Limitations
+
+- Analysis is based on historical inventory data and does not include real-time data.
+
+- External factors such as supplier delays and seasonality were not explicitly modeled.
+
+- Observational results do not establish causality.
+
+### Future Enhancements
+
+- Integrate real-time inventory, supplier, and demand data.
+
+- Add model explainability using SHAP or feature importance analysis.
+
+- Persist and version trained pipelines for deployment.
+
+- Deploy the pipeline as a REST API or integrate it into BI dashboards.
+
+- Extend the pipeline for continuous monitoring and retraining.
+  
+## Author
+Created by Rameswari Mishra
