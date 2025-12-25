@@ -22,7 +22,7 @@ The project follows a modular, pipeline-driven machine learning approach, where 
 Multiple pipeline configurations were explored during experimentation. From these, the three best-performing pipelines were selected for detailed analysis and showcase based on their ability to balance minority-class recall (backorders) with overall prediction stability.
 
 ### Stage 1: Data Preprocessing & Feature Engineering
-Notebook: Part_1_Data_Preprocessing.ipynb
+**Notebook:** Part_1_Data_Preprocessing.ipynb
 
 - Analyzed the structure and quality of the inventory dataset to understand key drivers of backorders.
 
@@ -35,7 +35,7 @@ Notebook: Part_1_Data_Preprocessing.ipynb
 - Prepared a clean, model-ready dataset with proper train–test separation to prevent data leakage.
 
 ### Stage 2: Pipeline Strategy & Outlier Handling
-Notebook: Part_2_Model_Development.ipynb
+**Notebook:** Part_2_Model_Development.ipynb
 Inventory datasets often contain anomalous and noisy records due to data entry errors, rare demand spikes, or supply chain disruptions. To mitigate their impact, outlier detection was treated as an explicit preprocessing stage in the pipeline design.
 
 #### Strategy:
@@ -89,24 +89,92 @@ Captures nonlinear relationships and feature interactions using an ensemble of d
 
 This pipeline demonstrated the strongest balance between robustness, predictive power, and stability.
 ```
-### Stage 3: Model Evaluation & Validation
+#### Model Training, Grid Search & Cross-Validation
 
-Notebook: Part_3_Model_Evaluation.ipynb
+After outliers were removed from the training data, all models were trained exclusively on the inlier dataset.
 
-##### Evaluated models using business-relevant metrics:
-```
-Precision
+##### For each pipeline configuration:
 
-Recall
+- A unified pipeline combining feature selection and classification was defined.
 
-F1-score
+- Hyperparameter tuning was performed using GridSearchCV.
 
-ROC-AUC
-```
-- Analyzed confusion matrices to assess the cost of false negatives (missed backorders).
+- 5-fold cross-validation was applied on the inlier training data to ensure robust performance estimation.
 
-- Validated model robustness using a clean evaluation pipeline.
+- Given the severe class imbalance, recall and F1-score were prioritized as scoring metrics during grid search.
 
-- Interpreted results to translate model outputs into actionable inventory insights.
+Once tuning was complete, the best-performing pipeline configuration was selected and evaluated on a held-out test set that had not been used during outlier detection, training, or hyperparameter tuning.
 
-- Prepared the pipeline for model persistence using pickle, supporting reproducibility and future deployment.
+This strategy ensured unbiased and leakage-free evaluation.
+
+### Stage 3: Model Evaluation & Validation  
+**Notebook:** `Part_3_Model_Evaluation.ipynb`
+
+After training and tuning the pipelines on the inlier training data, all models were evaluated using a structured and unbiased validation strategy.
+
+#### Evaluation Metrics
+Models were assessed using **business-relevant performance metrics**, including:
+- Precision
+- Recall
+- F1-score
+- ROC-AUC
+
+These metrics were selected to account for the **imbalanced nature of the backorder dataset**, where recall for backordered items is particularly critical.
+
+#### Validation Strategy
+- Confusion matrices were analyzed to assess the **cost of false negatives**, representing missed backorder risks.
+- Model robustness was validated using a clean and consistent evaluation pipeline applied to a held-out test set.
+- Results were interpreted in the context of inventory management to translate model predictions into **actionable business insights**.
+- The final pipeline was prepared for **model persistence using pickle**, supporting reproducibility and future deployment.
+
+This evaluation framework ensured that reported results reflect realistic performance on unseen data.
+
+### Pipeline Comparison
+
+All three pipelines were evaluated under identical conditions:
+
+- Same feature preprocessing outputs
+
+- Same train–test split
+
+- Same evaluation metrics
+
+Among the evaluated pipelines, the **Elliptic Envelope + RFE + Random Forest**  pipeline consistently outperformed the others in terms of minority-class detection and overall stability, making it the preferred solution.
+
+### Performance & Results
+
+The best-performing pipeline—Elliptic Envelope + RFE + Random Forest—achieved:
+
+**F1-score of 0.95 for non–backordered items**, indicating high accuracy in identifying products with sufficient inventory and minimizing false alerts.
+
+**Recall of 0.81 for backordered items**, correctly identifying 81% of products at risk of going into backorder.
+
+Strong performance on a **highly imbalanced dataset**, balancing reliable backorder detection with overall prediction stability.
+
+### Tools & Technologies
+
+- Programming Language: Python
+
+- Libraries: pandas, NumPy, scikit-learn, matplotlib, seaborn
+
+- Outlier Detection: Isolation Forest, One-Class SVM, Elliptic Envelope
+
+- Feature Selection: PCA, Factor Analysis, RFE
+
+- Models: SVC, Logistic Regression, Random Forest
+
+- Environment: Jupyter Notebook
+
+### Repository Structure 
+
+backorder-prediction-ml/
+├── notebooks/
+│   ├── Part_1_Data_Preprocessing.ipynb
+│   ├── Part_2_Model_Development.ipynb
+│   └── Part_3_Model_Evaluation.ipynb
+|   └── README.md
+|
+├── README.md
+├── requirements.txt
+└── .gitignore
+
